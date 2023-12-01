@@ -62,7 +62,7 @@ void preauton(void){
   setChassisVelocity(40,1);
   Intake.setVelocity(50, percent);
 }
-void practiceauton(){
+void practiceauton(){ // No longer the main auton
   setChassisVelocity(40, 1);
   // driveDistanceInches(7*9.1/4);
   turnChassisLeft(4*0.807);
@@ -91,6 +91,8 @@ void auton_2(){
   turnChassisRight(2);
   Intake.spinFor(forward, 1.25, sec);
   driveDistanceInches(50, 30.75);
+}
+void auton_skills(){ // Autonomous skills section
 }
 void hiddencommands(){
   auton_2();
