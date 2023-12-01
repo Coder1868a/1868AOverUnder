@@ -19,6 +19,7 @@ double WHEEL_CICUMFERENCE = WHEEL_DIAMETER * pi;
 double CHASSIS_GEAR_RATIO = 84.0 / 36.0;
 double turn_multiplier = 0.807;
 double drive_multiplier = 2.275;
+bool isCataRunning = false;
 void initalize(void){
   vexcodeInit();
   Brain.Screen.print("initalization");
@@ -48,6 +49,11 @@ void turnChassisRight(float numTurns){
 }
 void toggle_wings(){
   wings.set(!wings.value());
+  wait(1000, msec);
+}
+
+void toggle_cata() {
+  isCataRunning = !isCataRunning;
   wait(1000, msec);
 }
 void preauton(void){
@@ -114,14 +120,19 @@ void driver_control(){
     } else{
       Intake.stop();
     }
-    if(Controller1.ButtonA.pressing()){
+    if(isCataRunning){
       Catapult.spin(forward);
     } else{
-      Catapult.stop();
+      if ((int) Catapult.position(deg) % 180 > 60 && (int) Catapult.position(deg) % 180 < 70) { 
+        Catapult.stop();
+      } else {
+        Catapult.spin(forward);
+      }
     }
     LeftMotor.spin(forward);
     RightMotor.spin(forward);
     Controller1.ButtonX.pressed(toggle_wings);
+    Controller1.ButtonA.pressed(toggle_cata);
     wait(6,msec);
   }
 }
