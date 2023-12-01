@@ -125,11 +125,7 @@ void driver_control(){
     if(isCataRunning){
       Catapult.spin(forward);
     } else{
-      if ((int) Catapult.position(deg) % 180 > 60 && (int) Catapult.position(deg) % 180 < 70) { 
-        Catapult.stop();
-      } else {
-        Catapult.spin(forward);
-      }
+      Catapult.stop();
     }
     LeftMotor.spin(forward);
     RightMotor.spin(forward);
