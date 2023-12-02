@@ -20,6 +20,8 @@ double CHASSIS_GEAR_RATIO = 84.0 / 36.0;
 double turn_multiplier = 0.807;
 double drive_multiplier = 2.275;
 bool isCataRunning = false;
+bool cataInTheZone = false;
+
 void initalize(void){
   vexcodeInit();
   Brain.Screen.print("initalization");
@@ -54,6 +56,7 @@ void toggle_wings(){
 
 void toggle_cata() {
   isCataRunning = !isCataRunning;
+  cataInTheZone = false;
   wait(1000, msec);
 }
 void preauton(void){
@@ -122,13 +125,26 @@ void driver_control(){
     } else{
       Intake.stop();
     }
-    if(isCataRunning){
+
+    //scenario 1: cata is running + not in reset pos - cata spins forward
+    // scenario 2: cata is running + in reset pos - cata spins forward
+    // scenario 3: cata is not running + not in reset pos - cata spins forward
+    // scenario 4: cata is not running + in reset pos - cata stops
+    
+    if(cataInTheZone) {
+      Catapult.stop();
+    } else if ((!(int) Catapult.position(deg) % 360 >= 200 && (int) Catapult.position(deg) % 360 <= 202)) {
       Catapult.spin(forward);
-    } else{
+    } else if (isCataRunning) {
+      Catapult.spin(forward);
+    } else {
+      cataInTheZone = true;
       Catapult.stop();
     }
+
     LeftMotor.spin(forward);
     RightMotor.spin(forward);
+
     Controller1.ButtonX.pressed(toggle_wings);
     Controller1.ButtonA.pressed(toggle_cata);
     wait(6,msec);
