@@ -66,9 +66,12 @@ void preauton(void){
   Intake.setVelocity(50, percent);
 }
 void practiceauton(){ // No longer the main auton
-  setChassisVelocity(200);
-  // driveDistanceInches(7*9.1/4);
-  turnChassisLeft(4*0.807);
+  Intake.spinFor(reverse, 1, sec);
+  turnChassisRight(1);
+  Intake.spinFor(forward, 1, sec);
+  driveDistanceInches(19);
+  turnChassisLeft(1);
+  driveDistanceInches(10);
 }
 void auton(){
   Intake.spinFor(reverse, 1, sec);
@@ -97,7 +100,8 @@ void auton_2(){
 }
 void auton_skills(){ // Autonomous skills section
 }
-void hiddencommands(){
+void hiddencommands(){ // Temporary notatiobn that shows the hidden auton functions
+  auton();
   auton_2();
 }
 void driver_control(){
@@ -153,7 +157,7 @@ void driver_control(){
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   initalize();
-  Competition.autonomous(auton);
+  Competition.autonomous(practiceauton);
   Competition.drivercontrol(driver_control);
   preauton();
 }
