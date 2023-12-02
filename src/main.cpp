@@ -99,6 +99,7 @@ void auton_2(){
   driveDistanceInches(30.75);
 }
 void auton_skills(){ // Autonomous skills section
+
 }
 void hiddencommands(){ // Temporary notatiobn that shows the hidden auton functions
   auton();
@@ -137,8 +138,9 @@ void driver_control(){
     
     if(cataInTheZone) {
       Catapult.stop();
-    } else if ((!(int) Catapult.position(deg) % 360 >= 200 && (int) Catapult.position(deg) % 360 <= 202)) {
+    } else if ((!(int) Catapult.position(deg) % 180 >= 150 && (int) Catapult.position(deg) % 180 <= 152)) {
       Catapult.spin(forward);
+      Brain.Screen.print("in position");
     } else if (isCataRunning) {
       Catapult.spin(forward);
     } else {
