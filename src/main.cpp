@@ -73,6 +73,9 @@ void practiceauton(){ // No longer the main auton
   wait(750, msec);
   turnChassisLeft(0.75);
   driveDistanceInches(14);
+  wait(500, msec);
+  driveDistanceInches(-4);
+  Intake.spinFor(forward, 1, sec);
 }
 void auton(){
   Intake.spinFor(reverse, 1, sec);
