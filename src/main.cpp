@@ -74,7 +74,17 @@ void practiceauton(){ // No longer the main auton
   turnChassisLeft(0.75);
   driveDistanceInches(14);
   wait(500, msec);
-  driveDistanceInches(-4);
+  driveDistanceInches(-10);
+  Intake.spinFor(forward, 1, sec);
+  driveDistanceInches(10);
+  wait(250, msec);
+  driveDistanceInches(-10);
+  driveDistanceInches(10);
+  wait(250, msec);
+  driveDistanceInches(-10);
+  driveDistanceInches(10);
+  wait(250, msec);
+  driveDistanceInches(-10);
   Intake.spinFor(forward, 1, sec);
 }
 void auton(){
@@ -174,7 +184,7 @@ void driver_control(){
     if(cataInTheZone) {
       Catapult.stop();
       Brain.Screen.printAt(100, 100, "im in the zone!");
-    } else if (!((int) Catapult.position(deg) % 180 >= 122 && (int) Catapult.position(deg) % 180 <= 133)) {
+    } else if (!((int) Catapult.position(deg) % 180 >= 0 && (int) Catapult.position(deg) % 180 <= 2)) {
       Catapult.spin(forward);
       Brain.Screen.printAt(100, 100, "in position");
     } else if (isCataRunning) {
