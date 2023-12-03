@@ -57,7 +57,7 @@ void toggle_wings(){
 void toggle_cata() {
   isCataRunning = !isCataRunning;
   cataInTheZone = false;
-  wait(1000, msec);
+  wait(500, msec);
 }
 void preauton(void){
   Brain.Screen.print("Preauton"); 
@@ -165,15 +165,20 @@ void driver_control(){
     // scenario 2: cata is running + in reset pos - cata spins forward
     // scenario 3: cata is not running + not in reset pos - cata spins forward
     // scenario 4: cata is not running + in reset pos - cata stops
-    
+
+    Brain.Screen.clearScreen();
+    Brain.Screen.print(Catapult.position(deg));
     if(cataInTheZone) {
       Catapult.stop();
+      Brain.Screen.print("im in the zone!");
     } else if ((!(int) Catapult.position(deg) % 180 >= 150 && (int) Catapult.position(deg) % 180 <= 152)) {
       Catapult.spin(forward);
       Brain.Screen.print("in position");
     } else if (isCataRunning) {
       Catapult.spin(forward);
+      Brain.Screen.print("im running");
     } else {
+      Brain.Screen.print("im  stooped");
       cataInTheZone = true;
       Catapult.stop();
     }
