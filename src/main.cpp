@@ -39,12 +39,19 @@ void driveDistanceInches(float distance){
   LeftMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees, false);
   RightMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees);
 }
-void turnChassisLeft(float numTurns){
+void Ramming(float distance){
+  setChassisVelocity(250);
+  float INCHES_PER_DEGREE = WHEEL_CICUMFERENCE / 360;
+  float degreesSpin = distance / INCHES_PER_DEGREE;
+  LeftMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees, false);
+  RightMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees);
+}
+void turnChassisLeft(bool numTurns){
   setChassisVelocity(100);
   LeftMotor.spinFor(reverse, numTurns * turn_multiplier, turns, false);
   RightMotor.spinFor(forward, numTurns, turns);
 }
-void turnChassisRight(float numTurns){
+void turnChassisRight(bool numTurns){
   setChassisVelocity(100);
   LeftMotor.spinFor(forward, numTurns * turn_multiplier, turns, false);
   RightMotor.spinFor(reverse, numTurns * turn_multiplier, turns);
@@ -74,37 +81,42 @@ void practiceauton(){ // No longer the main auton
   turnChassisLeft(0.75);
   driveDistanceInches(14);
   wait(500, msec);
-  driveDistanceInches(-10);
+  Ramming(-10);
   Intake.spinFor(forward, 1, sec);
-  driveDistanceInches(10);
+  Ramming(10);
   wait(250, msec);
-  driveDistanceInches(-10);
-  driveDistanceInches(10);
+  Ramming(-10);
+  Ramming(10);
   wait(250, msec);
-  driveDistanceInches(-10);
-  driveDistanceInches(10);
+  Ramming(-10);
+  Ramming(10);
   wait(250, msec);
-  driveDistanceInches(-10);
+  Ramming(-10);
   Intake.spinFor(forward, 1, sec);
 }
 void auton(){
-  Intake.spinFor(reverse, 1, sec);
+  Intake.spinFor(forward, 0.25, sec);
   turnChassisRight(1);
+  // Intake.spinFor(reverse, 1, sec);
+  driveDistanceInches(25);
+  wait(750, msec);
+  turnChassisLeft(0.75);
+  driveDistanceInches(14);
+  wait(500, msec);
+  Ramming(-10);
   Intake.spinFor(forward, 1, sec);
-  driveDistanceInches(38); // Pushing the preload into the goal
-  wait(500,msec);
-  driveDistanceInches(-10);
-  turnChassisLeft(2.7);
-  driveDistanceInches(20);
-  turnChassisRight(2);
-  wings.set(false);
-  driveDistanceInches(33);
-  turnChassisRight(2);
-  wait(250,msec);
-  driveDistanceInches(33);
+  Ramming(10);
+  Ramming(-10);
+  Intake.spinFor(forward, 1, sec);
+  turnChassisLeft(1.825);
   wait(250, msec);
-  wings.set(true);
-  driveDistanceInches(-16.5);
+  driveDistanceInches(27.5);
+  // wings.set(false);
+  // turnChassisRight(2);
+  // driveDistanceInches(18.27);
+  // turnChassisRight(2);
+  // driveDistanceInches(40);
+
 }
 void auton_2(){
   Intake.spinFor(reverse, 1, sec);
@@ -207,7 +219,7 @@ void driver_control(){
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   initalize();
-  Competition.autonomous(practiceauton);
+  Competition.autonomous(auton);
   Competition.drivercontrol(driver_control);
   preauton();
 }
