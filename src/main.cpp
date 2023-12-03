@@ -70,6 +70,7 @@ void practiceauton(){ // No longer the main auton
   turnChassisRight(1);
   Intake.spinFor(forward, 1, sec);
   driveDistanceInches(19);
+  wait(750, msec);
   turnChassisLeft(1);
   driveDistanceInches(10);
 }
@@ -107,16 +108,27 @@ void auton_skills(){ // Autonomous skills section
   turnChassisLeft(2); // turn chassis left, left of the pvc pipe
   driveDistanceInches(48); // move robot forwards
   turnChassisRight(2); //  turn right, towards the pvc
-  driveDistanceInches(5);// slightly move, to push triballs over the 
-  turnChassisRight(2);
-  wings.set(false);
-  turnChassisLeft(2);
-  driveDistanceInches(36);
-  turnChassisRight(2);
-  driveDistanceInches(23);
-  turnChassisRight(2);
-  driveDistanceInches(12);
-  turnChassisRight(2);
+  driveDistanceInches(5); // slightly move, to push triballs over the pvc
+  turnChassisLeft(2); // turn left, back towards the same position
+  wings.set(true); // close wings
+  wait(750, msec);
+  turnChassisLeft(2); // turn robot left
+  driveDistanceInches(36); // move forward
+  turnChassisRight(2); // turn towards the top
+  driveDistanceInches(23); // move towards the top
+  turnChassisRight(2); // turn right
+  driveDistanceInches(24);// move under the elevation bar
+  turnChassisRight(2); // turn right
+  driveDistanceInches(26.04); // Move forward
+  wings.set(false); // Open wings
+  wait(750, msec); // Wait
+  turnChassisRight(2); // turn right towards pvc pipe
+  driveDistanceInches(12); // move towards the pvc pipe
+  turnChassisLeft(2); // turn chassis left, left of the pvc pipe
+  driveDistanceInches(25); // move robot forwards
+  turnChassisLeft(2); // turn robot left
+  driveDistanceInches(35);
+  wait(750, msec);
 }
 void hiddencommands(){ // Temporary notatiobn that shows the hidden auton functions
   auton();
@@ -126,6 +138,7 @@ void driver_control(){
   int deadband = 5;
   Intake.setVelocity(50, percent);
   Catapult.setVelocity(40, rpm);
+  Catapult.setPosition(0, deg);
   wings.set(true);
   while(1){
     int leftmotorspeed = Controller1.Axis3.position() + Controller1.Axis1.position();
