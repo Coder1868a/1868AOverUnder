@@ -167,18 +167,18 @@ void driver_control(){
     // scenario 4: cata is not running + in reset pos - cata stops
 
     Brain.Screen.clearScreen();
-    Brain.Screen.print(Catapult.position(deg));
+    Brain.Screen.printAt(100, 150, "string", (Catapult.position(deg)));
     if(cataInTheZone) {
       Catapult.stop();
-      Brain.Screen.print("im in the zone!");
-    } else if ((!(int) Catapult.position(deg) % 180 >= 150 && (int) Catapult.position(deg) % 180 <= 152)) {
+      Brain.Screen.printAt(100, 100, "im in the zone!");
+    } else if (!((int) Catapult.position(deg) % 180 >= 122 && (int) Catapult.position(deg) % 180 <= 133)) {
       Catapult.spin(forward);
-      Brain.Screen.print("in position");
+      Brain.Screen.printAt(100, 100, "in position");
     } else if (isCataRunning) {
       Catapult.spin(forward);
-      Brain.Screen.print("im running");
+      Brain.Screen.printAt(100, 100, "im running");
     } else {
-      Brain.Screen.print("im  stooped");
+      Brain.Screen.printAt(100, 100, "im  stooped");
       cataInTheZone = true;
       Catapult.stop();
     }
