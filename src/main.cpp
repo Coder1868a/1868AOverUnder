@@ -66,13 +66,13 @@ void preauton(void){
   Intake.setVelocity(50, percent);
 }
 void practiceauton(){ // No longer the main auton
-  Intake.spinFor(reverse, 1, sec);
+  Intake.spinFor(forward, 0.25, sec);
   turnChassisRight(1);
-  Intake.spinFor(forward, 1, sec);
-  driveDistanceInches(19);
+  // Intake.spinFor(reverse, 1, sec);
+  driveDistanceInches(25);
   wait(750, msec);
-  turnChassisLeft(1);
-  driveDistanceInches(10);
+  turnChassisLeft(0.75);
+  driveDistanceInches(14);
 }
 void auton(){
   Intake.spinFor(reverse, 1, sec);
