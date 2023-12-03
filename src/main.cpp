@@ -99,7 +99,24 @@ void auton_2(){
   driveDistanceInches(30.75);
 }
 void auton_skills(){ // Autonomous skills section
-
+  driveDistanceInches(26.04); // Move forward
+  wings.set(false); // Open wings
+  wait(750, msec); // Wait
+  turnChassisRight(2); // turn right towards pvc pipe
+  driveDistanceInches(12); // move towards the pvc pipe
+  turnChassisLeft(2); // turn chassis left, left of the pvc pipe
+  driveDistanceInches(48); // move robot forwards
+  turnChassisRight(2); //  turn right, towards the pvc
+  driveDistanceInches(5);// slightly move, to push triballs over the 
+  turnChassisRight(2);
+  wings.set(false);
+  turnChassisLeft(2);
+  driveDistanceInches(36);
+  turnChassisRight(2);
+  driveDistanceInches(23);
+  turnChassisRight(2);
+  driveDistanceInches(12);
+  turnChassisRight(2);
 }
 void hiddencommands(){ // Temporary notatiobn that shows the hidden auton functions
   auton();
