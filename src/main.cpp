@@ -39,6 +39,13 @@ void driveDistanceInches(float distance){
   LeftMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees, false);
   RightMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees);
 }
+void driveDistanceInches2(float distance){
+  setChassisVelocity(150);
+  float INCHES_PER_DEGREE = WHEEL_CICUMFERENCE / 360;
+  float degreesSpin = distance / INCHES_PER_DEGREE;
+  LeftMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees, false);
+  RightMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees);
+}
 void Ramming(float distance){
   setChassisVelocity(250);
   float INCHES_PER_DEGREE = WHEEL_CICUMFERENCE / 360;
@@ -46,12 +53,12 @@ void Ramming(float distance){
   LeftMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees, false);
   RightMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees);
 }
-void turnChassisLeft(bool numTurns){
+void turnChassisLeft(float numTurns){
   setChassisVelocity(100);
   LeftMotor.spinFor(reverse, numTurns * turn_multiplier, turns, false);
   RightMotor.spinFor(forward, numTurns, turns);
 }
-void turnChassisRight(bool numTurns){
+void turnChassisRight(float numTurns){
   setChassisVelocity(100);
   LeftMotor.spinFor(forward, numTurns * turn_multiplier, turns, false);
   RightMotor.spinFor(reverse, numTurns * turn_multiplier, turns);
@@ -104,19 +111,19 @@ void auton(){
   driveDistanceInches(14);
   wait(500, msec);
   Ramming(-10);
-  Intake.spinFor(forward, 1, sec);
   Ramming(10);
   Ramming(-10);
   Intake.spinFor(forward, 1, sec);
-  turnChassisLeft(1.825);
+  turnChassisLeft(1.675);
   wait(250, msec);
   driveDistanceInches(27.5);
-  // wings.set(false);
-  // turnChassisRight(2);
-  // driveDistanceInches(18.27);
-  // turnChassisRight(2);
-  // driveDistanceInches(40);
-
+  wait(250, msec);
+  wings.set(false);
+  driveDistanceInches(15);
+  turnChassisRight(1.365);
+  driveDistanceInches2(19.25);
+  turnChassisRight(2);
+  driveDistanceInches(55);
 }
 void auton_2(){
   Intake.spinFor(reverse, 1, sec);
