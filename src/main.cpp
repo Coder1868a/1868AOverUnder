@@ -117,7 +117,7 @@ void auton(){
   driveDistanceInches(27.5);
   wait(250, msec);
   wings.set(false);
-  driveDistanceInches(15);
+  driveDistanceInches2(15);
   turnChassisRight(1.365);
   driveDistanceInches2(19.25);
   turnChassisRight(2);
@@ -153,11 +153,11 @@ void auton_skills(){ // Autonomous skills section
   wings.set(false); // Open wings
   wait(750, msec); // Wait
   turnChassisRight(2); // turn right towards pvc pipe
-  driveDistanceInches(12); // move towards the pvc pipe
+  driveDistanceInches(18); // move towards the pvc pipe
   turnChassisLeft(2); // turn chassis left, left of the pvc pipe
   driveDistanceInches(25); // move robot forwards
   turnChassisLeft(2); // turn robot left
-  driveDistanceInches(35);
+  driveDistanceInches(40);
   wait(750, msec);
 }
 void hiddencommands(){ // Temporary notatiobn that shows the hidden auton functions
