@@ -33,7 +33,14 @@ void setChassisVelocity(float numPercent){
   RightMotor.setVelocity(numPercent, rpm);
 }
 void driveDistanceInches(float distance){
-  setChassisVelocity(240);
+  setChassisVelocity(200);
+  float INCHES_PER_DEGREE = WHEEL_CICUMFERENCE / 360;
+  float degreesSpin = distance / INCHES_PER_DEGREE;
+  LeftMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees, false);
+  RightMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees);
+}
+void driveDistanceInches1(float distance){
+  setChassisVelocity(250);
   float INCHES_PER_DEGREE = WHEEL_CICUMFERENCE / 360;
   float degreesSpin = distance / INCHES_PER_DEGREE;
   LeftMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees, false);
@@ -54,7 +61,7 @@ void Ramming(float distance){
   RightMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees);
 }
 void turnChassisLeft(float numTurns){
-  setChassisVelocity(100);
+  setChassisVelocity(150);
   LeftMotor.spinFor(reverse, numTurns * turn_multiplier, turns, false);
   RightMotor.spinFor(forward, numTurns, turns);
 }
@@ -114,14 +121,14 @@ void auton(){
   Intake.spinFor(forward, 1, sec);
   turnChassisLeft(1.675);
   wait(250, msec);
-  driveDistanceInches(27.5);
+  driveDistanceInches1(23);
   wait(250, msec);
   wings.set(false);
-  driveDistanceInches2(15);
+  driveDistanceInches2(16);
   turnChassisRight(1.365);
-  driveDistanceInches2(19.25);
+  driveDistanceInches2(24);
   turnChassisRight(2);
-  driveDistanceInches(55);
+  driveDistanceInches1(55);
 }
 void auton_2(){
   Intake.spinFor(reverse, 1, sec);
