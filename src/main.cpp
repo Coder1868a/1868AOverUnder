@@ -33,7 +33,7 @@ void setChassisVelocity(float numPercent){
   RightMotor.setVelocity(numPercent, rpm);
 }
 void driveDistanceInches(float distance){
-  setChassisVelocity(200);
+  setChassisVelocity(240);
   float INCHES_PER_DEGREE = WHEEL_CICUMFERENCE / 360;
   float degreesSpin = distance / INCHES_PER_DEGREE;
   LeftMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees, false);
@@ -110,8 +110,6 @@ void auton(){
   turnChassisLeft(0.75);
   driveDistanceInches(14);
   wait(500, msec);
-  Ramming(-10);
-  Ramming(10);
   Ramming(-10);
   Intake.spinFor(forward, 1, sec);
   turnChassisLeft(1.675);
