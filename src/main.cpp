@@ -28,6 +28,10 @@ void initalize(void){
   wings.set(true); 
 }
 
+// --------------------------------------------------------------------------------------------
+/// HELPER FUNCTIONS HERE ////
+// --------------------------------------------------------------------------------------------
+
 void setChassisVelocity(float numPercent){
   LeftMotor.setVelocity(numPercent, rpm);
   RightMotor.setVelocity(numPercent, rpm);
@@ -53,6 +57,14 @@ void driveDistanceInches2(float distance){
   LeftMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees, false);
   RightMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees);
 }
+
+void driveDistanceInches3(float distance){
+  setChassisVelocity(330);
+  float INCHES_PER_DEGREE = WHEEL_CICUMFERENCE / 360;
+  float degreesSpin = distance / INCHES_PER_DEGREE;
+  LeftMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees, false);
+  RightMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees);
+}
 void Ramming(float distance){
   setChassisVelocity(250);
   float INCHES_PER_DEGREE = WHEEL_CICUMFERENCE / 360;
@@ -65,8 +77,19 @@ void turnChassisLeft(float numTurns){
   LeftMotor.spinFor(reverse, numTurns * turn_multiplier, turns, false);
   RightMotor.spinFor(forward, numTurns, turns);
 }
+void turnChassisLeft1(float numTurns) {
+  setChassisVelocity(100);
+  LeftMotor.spinFor(reverse, numTurns * turn_multiplier, turns, false);
+  RightMotor.spinFor(forward, numTurns * turn_multiplier, turns);
+}
 void turnChassisRight(float numTurns){
   setChassisVelocity(100);
+  LeftMotor.spinFor(forward, numTurns * turn_multiplier, turns, false);
+  RightMotor.spinFor(reverse, numTurns * turn_multiplier, turns);
+}
+
+void turnChassisRightSlow(float numTurns){
+  setChassisVelocity(30);
   LeftMotor.spinFor(forward, numTurns * turn_multiplier, turns, false);
   RightMotor.spinFor(reverse, numTurns * turn_multiplier, turns);
 }
@@ -80,12 +103,35 @@ void toggle_cata() {
   cataInTheZone = false;
   wait(500, msec);
 }
+// --------------------------------------------------------------------------------------------
+/// AUTONS HERE ////
+// --------------------------------------------------------------------------------------------
+
 void preauton(void){
   Brain.Screen.print("Preauton"); 
   wings.set(true); 
   setChassisVelocity(200);
   Intake.setVelocity(50, percent);
 }
+
+void skills_auton() { // basic all match loading skills
+  turnChassisRight(1);
+  driveDistanceInches3(25);
+  wait(100, msec);
+
+  turnChassisLeft(0.75);
+  driveDistanceInches3(10);
+  wait(100,msec);
+
+  turnChassisRight(2); // turn 90 degrees to face match load place
+  wings.set(false); // pop wings
+
+  driveDistanceInches2(5); // drive forward into goal
+  turnChassisRight(0.25); // adjust for ideal angle
+
+  Catapult.spinFor(50, sec);
+}
+
 void practiceauton(){ // No longer the main auton
   Intake.spinFor(forward, 0.25, sec);
   turnChassisRight(1);
@@ -108,27 +154,57 @@ void practiceauton(){ // No longer the main auton
   Ramming(-10);
   Intake.spinFor(forward, 1, sec);
 }
-void auton(){
+void emmas_auton() {
   Intake.spinFor(forward, 0.25, sec);
   turnChassisRight(1);
   // Intake.spinFor(reverse, 1, sec);
   driveDistanceInches(25);
-  wait(750, msec);
+  wait(100, msec); // Emma: made this wait a little shorter
   turnChassisLeft(0.75);
-  driveDistanceInches(14);
-  wait(500, msec);
+  driveDistanceInches3(14);
+  wait(300, msec);
   Ramming(-10);
+  Intake.spinFor(forward, 0.5, sec); // Emma: made the intake spin less
+
+  turnChassisLeft(1.675); // turn left to balls
+  wait(100, msec); // Emma: decreased wait times on mostly everything
+  driveDistanceInches3(45); // approach first ball
+  Intake.spinFor(reverse, 1.3, sec); // intake ball
+  wait(100, msec);
+  turnChassisRight(1.5); // turn 90 degree right to face other ball
+
+  driveDistanceInches3(16); // drive to other ball
+  //Intake.spinFor(reverse, 1, sec); // intake other ball
+  wait(100, msec);
+  turnChassisRight(1.5); // face goal
+  wait(100,msec);
   Intake.spinFor(forward, 1, sec);
-  turnChassisLeft(1.675);
-  wait(250, msec);
-  driveDistanceInches1(23);
-  wait(250, msec);
   wings.set(false);
-  driveDistanceInches2(16);
-  turnChassisRight(1.365);
-  driveDistanceInches2(24);
-  turnChassisRight(2);
-  driveDistanceInches1(55);
+  driveDistanceInches3(55); //drive into goal!
+
+
+}
+void auton(){
+  Intake.spinFor(forward, 0.25, sec); // let down intake to be in size
+  turnChassisRight(1); // turn 45 degreees
+  driveDistanceInches(25); 
+  wait(100, msec); // Emma: made this wait a little shorter
+  turnChassisLeft(0.75);
+  driveDistanceInches(14); // drive to goal and push ball in
+  wait(500, msec);
+  Ramming(-10); // drives backward from goal
+  Intake.spinFor(forward, 0.50, sec); // Emma: made the intake spin less
+  turnChassisLeft(1.675); // turn left and outward to the rest of the balls
+  wait(100, msec); // Emma: decreased wait times on mostly everything
+  driveDistanceInches1(23); // drive to the balls
+  wait(25, msec);
+  wings.set(false); // pop wings out
+  driveDistanceInches2(16); // continue driving to begin to push them in
+  turnChassisRight(1.365); // turn 90 degrees
+  driveDistanceInches2(24); // drive and continue to corral balls
+  wait(100, msec); // add a wait before the turn to allow the balls to settle
+  turnChassisRightSlow(2.2); // Emma: i made this slower and turn a little more so the balls hopefully won't roll away
+  driveDistanceInches1(55); // drive into goal with wings popped!
 }
 void auton_2(){
   Intake.spinFor(reverse, 1, sec);
@@ -231,7 +307,7 @@ void driver_control(){
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   initalize();
-  Competition.autonomous(auton);
+  Competition.autonomous(emmas_auton);
   Competition.drivercontrol(driver_control);
   preauton();
 }
