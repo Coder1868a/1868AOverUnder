@@ -115,20 +115,21 @@ void preauton(void){
 }
 
 void skills_auton() { // basic all match loading skills
+  Intake.spinFor(forward, 1, sec);
   turnChassisRight(1);
-  driveDistanceInches3(25);
+  driveDistanceInches3(18);
   wait(100, msec);
 
   turnChassisLeft(0.75);
-  driveDistanceInches3(10);
+  driveDistanceInches3(7);
   wait(100,msec);
 
   turnChassisRight(2); // turn 90 degrees to face match load place
   wings.set(false); // pop wings
 
-  driveDistanceInches2(5); // drive forward into goal
+  driveDistanceInches2(3); // drive forward into goal
   turnChassisRight(0.25); // adjust for ideal angle
-
+  Catapult.setVelocity(40,rpm);
   Catapult.spinFor(50, sec);
 }
 
@@ -173,10 +174,10 @@ void emmas_auton() {
   wait(100, msec);
   turnChassisRight(1.5); // turn 90 degree right to face other ball
 
-  driveDistanceInches3(16); // drive to other ball
+  driveDistanceInches3(18); // drive to other ball
   //Intake.spinFor(reverse, 1, sec); // intake other ball
   wait(100, msec);
-  turnChassisRight(1.5); // face goal
+  turnChassisRight(2); // face goal
   wait(100,msec);
   Intake.spinFor(forward, 1, sec);
   wings.set(false);
@@ -207,10 +208,7 @@ void auton(){
   driveDistanceInches1(55); // drive into goal with wings popped!
 }
 void auton_2(){
-  Intake.spinFor(reverse, 1, sec);
-  turnChassisRight(2);
-  Intake.spinFor(forward, 1.25, sec);
-  driveDistanceInches(30.75);
+  driveDistanceInches3(23);
 }
 void auton_skills(){ // Autonomous skills section
   driveDistanceInches(26.04); // Move forward
@@ -246,6 +244,40 @@ void auton_skills(){ // Autonomous skills section
 void hiddencommands(){ // Temporary notatiobn that shows the hidden auton functions
   auton();
   auton_2();
+  skills_auton();
+  /*
+  void auton_skills(){ // Autonomous skills section
+  driveDistanceInches(26.04); // Move forward
+  wings.set(false); // Open wings
+  wait(750, msec); // Wait
+  turnChassisRight(2); // turn right towards pvc pipe
+  driveDistanceInches(12); // move towards the pvc pipe
+  turnChassisLeft(2); // turn chassis left, left of the pvc pipe
+  driveDistanceInches(48); // move robot forwards
+  turnChassisRight(2); //  turn right, towards the pvc
+  driveDistanceInches(5); // slightly move, to push triballs over the pvc
+  turnChassisLeft(2); // turn left, back towards the same position
+  wings.set(true); // close wings
+  wait(750, msec);
+  turnChassisLeft(2); // turn robot left
+  driveDistanceInches(36); // move forward
+  turnChassisRight(2); // turn towards the top
+  driveDistanceInches(23); // move towards the top
+  turnChassisRight(2); // turn right
+  driveDistanceInches(24);// move under the elevation bar
+  turnChassisRight(2); // turn right
+  driveDistanceInches(26.04); // Move forward
+  wings.set(false); // Open wings
+  wait(750, msec); // Wait
+  turnChassisRight(2); // turn right towards pvc pipe
+  driveDistanceInches(18); // move towards the pvc pipe
+  turnChassisLeft(2); // turn chassis left, left of the pvc pipe
+  driveDistanceInches(25); // move robot forwards
+  turnChassisLeft(2); // turn robot left
+  driveDistanceInches(40);
+  wait(750, msec);
+}
+  */
 }
 void driver_control(){
   int deadband = 5;
@@ -307,7 +339,7 @@ void driver_control(){
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   initalize();
-  Competition.autonomous(emmas_auton);
+  Competition.autonomous(auton_2);
   Competition.drivercontrol(driver_control);
   preauton();
 }
