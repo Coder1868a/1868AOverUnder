@@ -208,7 +208,7 @@ void auton(){
   driveDistanceInches1(55); // drive into goal with wings popped!
 }
 void auton_2(){
-  driveDistanceInches3(23);
+  driveDistanceInches3(-23);
 }
 void auton_skills(){ // Autonomous skills section
   driveDistanceInches(26.04); // Move forward
