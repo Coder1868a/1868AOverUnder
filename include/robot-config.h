@@ -13,6 +13,8 @@ extern motor leftmotorB;
 extern motor Catapult;
 extern motor Intake;
 extern digital_out wings;
+extern inertial inertialSensor;
+extern rotation rotationSensor;
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  *

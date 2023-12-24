@@ -316,7 +316,7 @@ void driver_control(){
     if(cataInTheZone) {
       Catapult.stop();
       Brain.Screen.printAt(100, 100, "im in the zone!");
-    } else if (!((int) Catapult.position(deg) % 180 >= 0 && (int) Catapult.position(deg) % 180 <= 2)) {
+    } else if (!((int) inertialSensor.rotation(deg) % 180 >= 0 && (int) inertialSensor.rotation(deg) % 180 <= 1)) {
       Catapult.spin(forward);
       Brain.Screen.printAt(100, 100, "in position");
     } else if (isCataRunning) {

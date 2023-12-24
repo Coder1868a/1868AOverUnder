@@ -17,6 +17,8 @@ motor_group LeftMotor = motor_group(leftmotorA, leftmotorM, leftmotorB);
 motor Intake = motor(PORT11, ratio6_1, true);
 motor Catapult = motor(PORT18, ratio36_1, false);
 digital_out wings = digital_out(Brain.ThreeWirePort.A);
+inertial inertialSensor = inertial(PORT15);
+rotation rotationSensor = rotation(PORT12);
 bool RemoteControlCodeEnabled = true;
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
