@@ -343,4 +343,8 @@ int main() {
   Competition.autonomous(auton_2);
   Competition.drivercontrol(driver_control);
   preauton();
+  // preventing main from exiting with an infinite loop
+  while(true){
+    wait(250,msec);
+  }
 }
