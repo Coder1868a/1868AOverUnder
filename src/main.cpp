@@ -113,6 +113,16 @@ void preauton(void){
   setChassisVelocity(200);
   Intake.setVelocity(50, percent);
 }
+/*
+void spinToGoal(int goal_deg, bool goal_degrees){
+  if(goal_deg == 0){
+    return goal_deg;
+  } else if(goal_deg < 0){
+    goal_degrees.set(false);
+    Chassis.spinTo(goal_deg, degrees);
+  }
+}
+*/
 
 void skills_auton() { // basic all match loading skills
   Intake.spinFor(forward, 1, sec);
