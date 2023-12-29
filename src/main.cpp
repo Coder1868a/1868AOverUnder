@@ -323,10 +323,11 @@ void driver_control(){
 
     Brain.Screen.clearScreen();
     Brain.Screen.printAt(100, 150, "string", (Catapult.position(deg)));
+    printf("%f\n", rotationSensor.angle(deg));
     if(cataInTheZone) {
       Catapult.stop();
       Brain.Screen.printAt(100, 100, "im in the zone!");
-    } else if (!((int) inertialSensor.rotation(deg) % 180 >= 0 && (int) inertialSensor.rotation(deg) % 180 <= 1)) {
+    } else if (!((int) rotationSensor.angle(deg) % 180 >= 0 && (int) rotationSensor.angle(deg) % 180 <= 5)) {
       Catapult.spin(forward);
       Brain.Screen.printAt(100, 100, "in position");
     } else if (isCataRunning) {
