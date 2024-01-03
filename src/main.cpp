@@ -21,7 +21,7 @@ double turn_multiplier = 0.807;
 double drive_multiplier = 2.275;
 bool isCataRunning = false;
 bool cataInTheZone = false;
-
+bool hang_up = false;
 void initalize(void){
   vexcodeInit();
   Brain.Screen.print("initalization");
@@ -97,14 +97,17 @@ void toggle_wings(){
   wings.set(!wings.value());
   wait(1000, msec);
 }
-
+void toggle_hang(){
+  hang.set(!hang_up);
+  wait(1000, msec);
+}
 void toggle_cata() {
   isCataRunning = !isCataRunning;
   cataInTheZone = false;
   wait(500, msec);
 }
 // --------------------------------------------------------------------------------------------
-//  AUTONS HERE ////
+//  AUTONS HERE // 
 // --------------------------------------------------------------------------------------------
 
 void preauton(void){
@@ -123,7 +126,118 @@ void spinToGoal(int goal_deg, bool goal_degrees){
   }
 }
 */
-
+// AUTONS FOR PID // 
+// turn variables //
+double ratio = 0.1;
+double destination = 90;
+double error = destination - inertialSensor.rotation(degrees);
+// drive variables // 
+double kP =0.1;
+double kI = 0.00001;
+double kD = 0.1;
+double turnkP = 0.0;
+double turnkI = 0.0;
+double turnkD = 0.0;
+int desiredValue = 200; // in degrees
+int desiredTurnValue = 0;
+int prevError = 0; // position 20 milliseconds ago
+int derivative; // error - prevError (slope of position is speed)
+int totalError = 0;
+int turnError; // current sensor value - desired value: positional value
+int turnPrevError = 0; // position 20 milliseconds ago
+int turnDerivative; // error - prevError (slope of position is speed)
+int turnTotalError = 0;
+float WHEEL_DIAM = 4.125;
+float PI = 3.1415;
+float GEAR_RATIO = 84.0 / 36.0;
+bool resetDriveSensors = false;
+// variables modified for use
+bool enableDrivePID = true;
+// PID Function
+int drivePID() {
+  while(enableDrivePID) {
+    if (resetDriveSensors) {
+      resetDriveSensors = false;
+      LeftMotor.setPosition(0, degrees);
+      RightMotor.setPosition(0, degrees);
+    }
+    int leftMotorPosition = LeftMotor.position(degrees);
+    int rightMotorPosition = RightMotor.position(degrees);
+     printf("left motor pos is %i\n", leftMotorPosition);
+     printf("right motor pos is %i\n", rightMotorPosition);
+    // ------------------
+    // lateral movement pid
+    // ------------------
+    // get average of the motors
+    int averagePosition = (leftMotorPosition + rightMotorPosition) / 2;
+    //potential
+    error = desiredValue - averagePosition;
+    // derivative
+    derivative = error - prevError;
+    // velocity -> position (integral)
+    // totalError += error; // compound error 
+    double lateralMotorPower = (error * kP + derivative * kD);
+    // ------------------
+    // TURN PID
+    // ------------------
+    // get average of the motors
+    int turnDifference = leftMotorPosition - rightMotorPosition;
+    //potential
+    turnError = turnDifference - desiredTurnValue;
+    // derivative
+    turnDerivative = turnError - turnPrevError;
+    // velocity -> position (integral)
+    // turnTotalError += turnError; // compound error 
+    double turnMotorPower = (turnError * turnkP + turnDerivative * turnkD );
+    printf("lateral power is %f\n", lateralMotorPower);
+    printf("error is %i\n", error);
+    RightMotor.spin(forward, lateralMotorPower, voltageUnits::volt);
+    LeftMotor.spin(forward, lateralMotorPower, voltageUnits::volt);
+    prevError = error;
+    turnPrevError = turnError;
+    vex::task::sleep(20); // don't want this using up all of our cpu
+  }
+  return 1;
+}
+void emma_inertial_drive_forward(float target) {
+  float x = 0.0;
+  float error = target - x;
+  float speed = 75.0;
+  float accuracy = 0.2;
+  float ks = 1.0;
+  float yaw = 0.0;
+  float lspeed = speed * fabs(error) / error - ks * yaw;
+  float rspeed = speed * fabs(error) / error + ks * yaw;
+  float pint = 0.01;
+  inertialSensor.setRotation(0.0, deg);
+  rightmotorA.setRotation(0.0, rev);
+  while (fabs(error) > accuracy) {
+    printf("error is %f\n", error);
+    RightMotor.spin(forward);
+    LeftMotor.spin(forward);
+    x = rightmotorA.position(rev) * PI * WHEEL_DIAM * pint;
+    error = target - x; 
+    yaw = inertialSensor.rotation(degrees);
+    lspeed = speed * fabs(error) / error - ks * yaw;
+    rspeed = speed * fabs(error) / error + ks * yaw;
+  }
+}
+void opposite_side_pid(){
+  vex::task callTask(drivePID);
+  resetDriveSensors =  true;
+  // turn 90 degrees right
+  LeftMotor.spin(forward,error * ratio, voltageUnits::volt);
+  RightMotor.spin(reverse,error*ratio,voltageUnits::volt);
+  printf("error is %f\n");
+  waitUntil(inertialSensor.rotation(degrees) >= 90);
+  LeftMotor.stop();
+  RightMotor.stop();
+  wait(400, msec);
+  // move forward 20 inches //
+  desiredValue = (20/(WHEEL_DIAM*PI)*360*GEAR_RATIO);
+  LeftMotor.stop();
+  RightMotor.stop();
+}
 void skills_auton() { // basic all match loading skills
   Intake.spinFor(forward, 1, sec);
   turnChassisRight(1);
@@ -344,6 +458,7 @@ void driver_control(){
 
     Controller1.ButtonX.pressed(toggle_wings);
     Controller1.ButtonA.pressed(toggle_cata);
+    Controller1.ButtonY.pressed(toggle_hang);
     wait(6,msec);
   }
 }

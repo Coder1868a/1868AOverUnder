@@ -15,6 +15,7 @@ extern motor Intake;
 extern digital_out wings;
 extern inertial inertialSensor;
 extern rotation rotationSensor;
+extern digital_out hang;
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  *
