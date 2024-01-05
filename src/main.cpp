@@ -122,10 +122,10 @@ double ratio = 0.1;
 double destination = 90;
 double error = destination - inertialSensor.rotation(degrees);
 // drive variables // 
-double kP =0.1;
-double kI = 0.00001;
+double kP =0.025;
+double kI = 0;
 double kD = 0.1;
-double turnkP = 0.0;
+double turnkP = 0.0001;
 double turnkI = 0.0;
 double turnkD = 0.0;
 int desiredValue = 200; // in degrees
@@ -181,8 +181,8 @@ int drivePID() {
     double turnMotorPower = (turnError * turnkP + turnDerivative * turnkD );
     printf("lateral power is %f\n", lateralMotorPower);
     printf("error is %i\n", error);
-    RightMotor.spin(forward, lateralMotorPower, voltageUnits::volt);
-    LeftMotor.spin(forward, lateralMotorPower, voltageUnits::volt);
+    RightMotor.spin(forward, lateralMotorPower + turnMotorPower, voltageUnits::volt);
+    LeftMotor.spin(forward, lateralMotorPower - turnMotorPower, voltageUnits::volt);
     prevError = error;
     turnPrevError = turnError;
     vex::task::sleep(20); // don't want this using up all of our cpu
@@ -216,29 +216,26 @@ void opposite_side_pid(){
   vex::task callTask(drivePID);
   resetDriveSensors =  true;
   // turn 90 degrees right
-  LeftMotor.spin(forward,error * ratio, voltageUnits::volt);
-  RightMotor.spin(reverse,error*ratio,voltageUnits::volt);
+  LeftMotor.spin(forward);
+  RightMotor.spin(reverse);
   printf("error is %f\n");
   waitUntil(inertialSensor.rotation(degrees) >= 90);
   LeftMotor.stop();
   RightMotor.stop();
   wait(400, msec);
   // move forward 20 inches //
-  emma_inertial_drive_forward(20);
-  LeftMotor.stop();
-  RightMotor.stop();
+  desiredTurnValue = 0;
+  desiredValue = (20/(WHEEL_DIAM*PI)*360*GEAR_RATIO);
   wait(400, msec);
 }
 void pidtest(void){
   vex::task callTask(drivePID);
   resetDriveSensors = true;
   desiredValue = (20/(WHEEL_DIAM*PI)*360*GEAR_RATIO);
-  LeftMotor.stop();
-  RightMotor.stop();
-  wait(1000, msec);
+  desiredTurnValue = 0;
+  wait(3000,msec);
   LeftMotor.spin(forward);
   RightMotor.spin(reverse);
-  printf("error is %f\n");
   waitUntil(inertialSensor.rotation(degrees) >= 90);
   LeftMotor.stop();
   RightMotor.stop();
@@ -262,6 +259,8 @@ void skills_auton() { // basic all match loading skills
   Catapult.setVelocity(40,rpm);
   Catapult.spinFor(50, sec);
 }
+
+
 
 void practiceauton(){ // No longer the main auton
   Intake.spinFor(forward, 0.25, sec);
@@ -471,7 +470,7 @@ void driver_control(){
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   initalize();
-  Competition.autonomous(pidtest);
+  Competition.autonomous(opposite_side_pid);
   Competition.drivercontrol(driver_control);
   preauton();
   // preventing main from exiting with an infinite loop
