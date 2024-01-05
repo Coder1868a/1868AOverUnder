@@ -98,7 +98,8 @@ void toggle_wings(){
   wait(1000, msec);
 }
 void toggle_hang(){
-  hang.set(!hang_up);
+  hang_up = !hang_up;
+  hang.set(hang_up);
   wait(1000, msec);
 }
 void toggle_cata() {
@@ -458,7 +459,7 @@ void driver_control(){
 
     Controller1.ButtonX.pressed(toggle_wings);
     Controller1.ButtonA.pressed(toggle_cata);
-    Controller1.ButtonY.pressed(toggle_hang);
+    Controller1.ButtonUp.pressed(toggle_hang);
     wait(6,msec);
   }
 }
