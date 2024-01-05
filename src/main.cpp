@@ -110,23 +110,12 @@ void toggle_cata() {
 // --------------------------------------------------------------------------------------------
 //  AUTONS HERE // 
 // --------------------------------------------------------------------------------------------
-
 void preauton(void){
   Brain.Screen.print("Preauton"); 
   wings.set(true); 
   setChassisVelocity(200);
   Intake.setVelocity(50, percent);
 }
-/*
-void spinToGoal(int goal_deg, bool goal_degrees){
-  if(goal_deg == 0){
-    return goal_deg;
-  } else if(goal_deg < 0){
-    goal_degrees.set(false);
-    Chassis.spinTo(goal_deg, degrees);
-  }
-}
-*/
 // AUTONS FOR PID // 
 // turn variables //
 double ratio = 0.1;
@@ -238,6 +227,21 @@ void opposite_side_pid(){
   desiredValue = (20/(WHEEL_DIAM*PI)*360*GEAR_RATIO);
   LeftMotor.stop();
   RightMotor.stop();
+}
+void pidtest(void){
+  vex::task callTask(drivePID);
+  resetDriveSensors = true;
+  desiredValue = (20/(WHEEL_DIAM*PI)*360*GEAR_RATIO);
+  LeftMotor.stop();
+  RightMotor.stop();
+  wait(400, msec);
+  LeftMotor.spin(forward, error * ratio, voltageUnits::volt);
+  RightMotor.spin(reverse, error * ratio, voltageUnits::volt);
+  printf("error is %f\n");
+  waitUntil(inertialSensor.rotation(degrees) >= 90);
+  LeftMotor.stop();
+  RightMotor.stop();
+  wait(400, msec);
 }
 void skills_auton() { // basic all match loading skills
   Intake.spinFor(forward, 1, sec);
@@ -466,7 +470,7 @@ void driver_control(){
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   initalize();
-  Competition.autonomous(auton_2);
+  Competition.autonomous(skills_auton);
   Competition.drivercontrol(driver_control);
   preauton();
   // preventing main from exiting with an infinite loop
