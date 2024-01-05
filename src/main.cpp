@@ -224,9 +224,10 @@ void opposite_side_pid(){
   RightMotor.stop();
   wait(400, msec);
   // move forward 20 inches //
-  desiredValue = (20/(WHEEL_DIAM*PI)*360*GEAR_RATIO);
+  emma_inertial_drive_forward(20);
   LeftMotor.stop();
   RightMotor.stop();
+  wait(400, msec);
 }
 void pidtest(void){
   vex::task callTask(drivePID);
@@ -234,9 +235,9 @@ void pidtest(void){
   desiredValue = (20/(WHEEL_DIAM*PI)*360*GEAR_RATIO);
   LeftMotor.stop();
   RightMotor.stop();
-  wait(400, msec);
-  LeftMotor.spin(forward, error * ratio, voltageUnits::volt);
-  RightMotor.spin(reverse, error * ratio, voltageUnits::volt);
+  wait(1000, msec);
+  LeftMotor.spin(forward);
+  RightMotor.spin(reverse);
   printf("error is %f\n");
   waitUntil(inertialSensor.rotation(degrees) >= 90);
   LeftMotor.stop();
@@ -470,7 +471,7 @@ void driver_control(){
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   initalize();
-  Competition.autonomous(skills_auton);
+  Competition.autonomous(pidtest);
   Competition.drivercontrol(driver_control);
   preauton();
   // preventing main from exiting with an infinite loop
