@@ -475,7 +475,7 @@ void driver_control(){
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   initalize();
-  Competition.autonomous(auton_2);
+  Competition.autonomous(skills_auton);
   Competition.drivercontrol(driver_control);
   preauton();
   // preventing main from exiting with an infinite loop
