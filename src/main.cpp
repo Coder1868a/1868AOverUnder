@@ -27,11 +27,9 @@ void initalize(void){
   Brain.Screen.print("initalization");
   wings.set(true); 
 }
-
 // --------------------------------------------------------------------------------------------
 /// HELPER FUNCTIONS HERE ////
 // --------------------------------------------------------------------------------------------
-
 void setChassisVelocity(float numPercent){
   LeftMotor.setVelocity(numPercent, rpm);
   RightMotor.setVelocity(numPercent, rpm);
@@ -57,7 +55,6 @@ void driveDistanceInches2(float distance){
   LeftMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees, false);
   RightMotor.spinFor(forward, degreesSpin * drive_multiplier, degrees);
 }
-
 void driveDistanceInches3(float distance){
   setChassisVelocity(330);
   float INCHES_PER_DEGREE = WHEEL_CICUMFERENCE / 360;
@@ -212,6 +209,14 @@ void emma_inertial_drive_forward(float target) {
     rspeed = speed * fabs(error) / error + ks * yaw;
   }
 }
+void new_turn(){
+  vex::task callTask(drivePID);
+  LeftMotor.spin(forward);
+  RightMotor.spin(reverse);
+  waitUntil(inertialSensor.angle() >= 90);
+  LeftMotor.stop();
+  RightMotor.stop();
+}
 void opposite_side_pid(){
   vex::task callTask(drivePID);
   resetDriveSensors =  true;
@@ -262,7 +267,7 @@ void skills_auton() { // basic all match loading skills
 
 
 
-void practiceauton(){ // No longer the main auton
+void practiceauton(void){ // No longer the main auton
   Intake.spinFor(forward, 0.25, sec);
   turnChassisRight(1);
   // Intake.spinFor(reverse, 1, sec);
@@ -311,7 +316,7 @@ void emmas_auton() {
   Intake.spinFor(forward, 1, sec);
   wings.set(false);
   driveDistanceInches3(55); //drive into goal!
-
+  
 
 }
 void auton(){
@@ -470,7 +475,7 @@ void driver_control(){
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   initalize();
-  Competition.autonomous(opposite_side_pid);
+  Competition.autonomous(auton_2);
   Competition.drivercontrol(driver_control);
   preauton();
   // preventing main from exiting with an infinite loop
